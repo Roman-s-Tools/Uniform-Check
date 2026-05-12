@@ -13,6 +13,6 @@ input,select{width:100%;border:1px solid var(--line);padding:.45rem;border-radiu
 .ribbon-name{font-size:.85rem;font-weight:600}.ribbon-meta{font-size:.75rem;color:#4b5563}
 .control-row{display:flex;gap:8px;max-width:140px}
 .rack{background:#fff;border:1px dashed #9fb0c2;border-radius:4px;padding:10px;min-height:150px;display:grid;gap:6px}
-.rack-row{display:flex;gap:6px}.ribbon-tile{width:92px;height:28px;object-fit:cover;border:1px solid #445264;border-radius:2px;background:#fff}
+.rack-row{display:flex;gap:6px;align-items:flex-start}.ribbon-stack{display:grid;justify-items:center;gap:2px;min-width:92px}.ribbon-tile{width:92px;height:28px;object-fit:cover;border:1px solid #445264;border-radius:2px;background:#fff}.device-row{height:16px;display:flex;gap:2px;align-items:center;justify-content:center}.device-icon{width:10px;height:10px;object-fit:contain}
 .selected-list{margin:8px 0 0;padding-left:18px;font-size:.88rem;display:grid;gap:4px}
 @media (max-width: 900px){.rack-layout{grid-template-columns:1fr}}

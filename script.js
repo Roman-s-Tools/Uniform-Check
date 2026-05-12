@@ -109,6 +109,14 @@ function renderCatalog(){
   });
 }
 
+function getDeviceCounts(totalAwards){
+  const additionalAwards = Math.max(0, totalAwards - 1);
+  return {
+    silver: Math.floor(additionalAwards / 5),
+    bronze: additionalAwards % 5
+  };
+}
+
 function renderRack(){
   const width = Number(el('rackWidth').value || 3);
   const sorted = [...selected.entries()]
@@ -116,11 +124,16 @@ function renderRack(){
     .filter((entry)=>entry.ribbon)
     .sort((a,b)=>a.ribbon.precedence-b.ribbon.precedence || a.ribbon.name.localeCompare(b.ribbon.name));
 
-  const expanded = sorted.flatMap(({ ribbon, count }) => Array.from({ length: count }, ()=>ribbon));
   const rows = [];
-  for(let i=0;i<expanded.length;i+=width) rows.push(expanded.slice(i,i+width));
+  for(let i=0;i<sorted.length;i+=width) rows.push(sorted.slice(i,i+width));
 
-  el('rackPreview').innerHTML = rows.map((row)=>`<div class="rack-row">${row.map((r)=>`<img class="ribbon-tile" title="${r.name}" src="${r.image}" alt="${r.name}"/>`).join('')}</div>`).join('') || '<div>No ribbons selected.</div>';
+  el('rackPreview').innerHTML = rows.map((row)=>`<div class="rack-row">${row.map(({ ribbon, count })=>{
+    const devices = getDeviceCounts(count);
+    const bronzeDevices = Array.from({ length: devices.bronze }, ()=>'<img class="device-icon" src="ribbons/devices/bronzetriangle.png" alt="Bronze triangle device"/>').join('');
+    const silverDevices = Array.from({ length: devices.silver }, ()=>'<img class="device-icon" src="ribbons/devices/silvertriangle.png" alt="Silver triangle device"/>').join('');
+
+    return `<div class="ribbon-stack" title="${ribbon.name} (x${count})"><img class="ribbon-tile" src="${ribbon.image}" alt="${ribbon.name}"/><div class="device-row">${silverDevices}${bronzeDevices}</div></div>`;
+  }).join('')}</div>`).join('') || '<div>No ribbons selected.</div>';
 
   el('selectedRibbons').innerHTML = sorted
     .map(({ ribbon, count })=>`<li>${ribbon.name} × ${count}</li>`)
