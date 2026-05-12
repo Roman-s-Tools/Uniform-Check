@@ -2,16 +2,16 @@ const MEMBER_TYPES = { adult: 'adult', cadet: 'cadet' };
 let memberType = MEMBER_TYPES.adult;
 
 const ribbons = [
-  { id:'silver_medal_valor', name:'Silver Medal of Valor', precedence:10, type:'adult', image:'https://mcchord.org/images/ribbons/s/silver01.png' },
-  { id:'bronze_medal_valor', name:'Bronze Medal of Valor', precedence:20, type:'adult', image:'https://mcchord.org/images/ribbons/s/bronze01.png' },
-  { id:'distinguished_service', name:'Distinguished Service Medal', precedence:40, type:'adult', image:'https://mcchord.org/images/ribbons/s/distin01.png' },
-  { id:'exceptional_service', name:'Exceptional Service Award', precedence:50, type:'adult', image:'https://mcchord.org/images/ribbons/s/except01.png' },
-  { id:'meritorious_service', name:'Meritorious Service Award', precedence:60, type:'adult', image:'https://mcchord.org/images/ribbons/s/meriti01.png' },
-  { id:'commanders_commendation', name:"Commander’s Commendation Award", precedence:70, type:'adult', image:'https://mcchord.org/images/ribbons/s/cmdrco01.png' },
-  { id:'achievement_award', name:'CAP Achievement Award', precedence:80, type:'adult', image:'https://mcchord.org/images/ribbons/s/AA01.png' },
-  { id:'red_service', name:'Red Service Ribbon', precedence:200, type:'adult', image:'https://mcchord.org/images/ribbons/s/redser-02yr.png' },
-  { id:'senior_recruiter', name:'Senior Recruiter Ribbon', precedence:230, type:'adult', image:'https://mcchord.org/images/ribbons/s/senrec01.png' },
-  { id:'encampment', name:'Encampment Ribbon', precedence:130, type:'cadet', image:'https://mcchord.org/images/ribbons/s/encamp01.png' }
+  { id:'silver_medal_valor', name:'Silver Medal of Valor', precedence:10, type:'adult', image:'ribbons/silver01.png' },
+  { id:'bronze_medal_valor', name:'Bronze Medal of Valor', precedence:20, type:'adult', image:'ribbons/bronze01.png' },
+  { id:'distinguished_service', name:'Distinguished Service Medal', precedence:40, type:'adult', image:'ribbons/distin01.png' },
+  { id:'exceptional_service', name:'Exceptional Service Award', precedence:50, type:'adult', image:'ribbons/except01.png' },
+  { id:'meritorious_service', name:'Meritorious Service Award', precedence:60, type:'adult', image:'ribbons/meriti01.png' },
+  { id:'commanders_commendation', name:"Commander’s Commendation Award *", precedence:70, type:'adult', image:'ribbons/cmdrco01.png' },
+  { id:'achievement_award', name:'CAP Achievement Award', precedence:80, type:'adult', image:'ribbons/AA01.png' },
+  { id:'red_service', name:'Red Service Ribbon', precedence:200, type:'adult', image:'ribbons/redser-02yr.png' },
+  { id:'senior_recruiter', name:'Senior Recruiter Ribbon', precedence:230, type:'adult', image:'ribbons/senrec01.png' },
+  { id:'encampment', name:'Encampment Ribbon', precedence:130, type:'cadet', image:'ribbons/encamp01.png' }
 ];
 
 const selected = new Set();
