@@ -1,6 +1,3 @@
-const MEMBER_TYPES = { adult: 'adult', cadet: 'cadet' };
-let memberType = MEMBER_TYPES.adult;
-
 const ribbonCatalog = [
   ['AA01.png','CAP Achievement Award',80,'adult'],
   ['cmdrco01.png','Commander’s Commendation Award *',70,'adult'],
@@ -60,54 +57,74 @@ const ribbonCatalog = [
   ['yeager.png','Brig Gen Chuck Yeager Award',185,'adult']
 ];
 
-const ribbons = ribbonCatalog.map(([file, name, precedence, type]) => ({
+const ribbons = ribbonCatalog.map(([file, name, precedence]) => ({
   id: file.replace(/\.png$/,'').replace(/[^a-zA-Z0-9]+/g,'_').toLowerCase(),
   name,
   precedence,
-  type,
   image: `ribbons/${file}`
 }));
 
-const selected = new Set();
+const selected = new Map();
 const el = (id) => document.getElementById(id);
 
 function init(){
   el('searchInput').addEventListener('input', renderCatalog);
   el('rackWidth').addEventListener('change', renderRack);
-  el('adultToggle').addEventListener('click', () => setType(MEMBER_TYPES.adult));
-  el('cadetToggle').addEventListener('click', () => setType(MEMBER_TYPES.cadet));
-  renderCatalog(); renderRack();
-}
-
-function setType(type){
-  memberType = type;
-  el('adultToggle').classList.toggle('active', type===MEMBER_TYPES.adult);
-  el('cadetToggle').classList.toggle('active', type===MEMBER_TYPES.cadet);
-  [...selected].forEach((id)=>{ if(ribbons.find(r=>r.id===id)?.type!==type) selected.delete(id); });
-  renderCatalog(); renderRack();
+  renderCatalog();
+  renderRack();
 }
 
 function getVisibleRibbons(){
   const q = el('searchInput').value.toLowerCase().trim();
-  return ribbons.filter(r=>r.type===memberType && r.name.toLowerCase().includes(q)).sort((a,b)=>a.precedence-b.precedence || a.name.localeCompare(b.name));
+  return ribbons
+    .filter((r)=>r.name.toLowerCase().includes(q))
+    .sort((a,b)=>a.precedence-b.precedence || a.name.localeCompare(b.name));
 }
 
 function renderCatalog(){
   const list = getVisibleRibbons();
-  el('ribbonResults').innerHTML = list.map(r=>`<article class="ribbon-item">
-    <img class="ribbon-swatch" src="${r.image}" alt="${r.name}" loading="lazy" />
-    <div><div class="ribbon-name">${r.name}</div><div class="ribbon-meta">Precedence #${r.precedence}</div>
-    <label><input type="checkbox" data-id="${r.id}" ${selected.has(r.id)?'checked':''}/> Select</label></div>
-  </article>`).join('') || '<p>No ribbons found.</p>';
-  document.querySelectorAll('input[data-id]').forEach((c)=>c.addEventListener('change',()=>{c.checked?selected.add(c.dataset.id):selected.delete(c.dataset.id);renderRack();}));
+  el('ribbonResults').innerHTML = list.map((r)=>{
+    const qty = selected.get(r.id) ?? '';
+    return `<article class="ribbon-item">
+      <img class="ribbon-swatch" src="${r.image}" alt="${r.name}" loading="lazy" />
+      <div>
+        <div class="ribbon-name">${r.name}</div>
+        <label class="qty-label">Awards Earned
+          <input class="qty-input" type="number" min="0" step="1" data-id="${r.id}" value="${qty}" placeholder="0" />
+        </label>
+      </div>
+    </article>`;
+  }).join('') || '<p>No ribbons found.</p>';
+
+  document.querySelectorAll('input[data-id]').forEach((input)=>{
+    input.addEventListener('input', ()=>{
+      const parsed = Number.parseInt(input.value, 10);
+      if (Number.isNaN(parsed) || parsed <= 0) {
+        selected.delete(input.dataset.id);
+      } else {
+        selected.set(input.dataset.id, parsed);
+      }
+      renderRack();
+    });
+  });
 }
 
 function renderRack(){
   const width = Number(el('rackWidth').value || 3);
-  const sorted = [...selected].map(id=>ribbons.find(r=>r.id===id)).filter(Boolean).sort((a,b)=>a.precedence-b.precedence || a.name.localeCompare(b.name));
-  const rows = []; for(let i=0;i<sorted.length;i+=width) rows.push(sorted.slice(i,i+width));
-  el('rackPreview').innerHTML = rows.map(row=>`<div class="rack-row">${row.map(r=>`<img class="ribbon-tile" title="${r.name}" src="${r.image}" alt="${r.name}"/>`).join('')}</div>`).join('') || '<div>No ribbons selected.</div>';
-  el('selectedRibbons').innerHTML = sorted.map(r=>`<li>${r.name}</li>`).join('') || '<li>No ribbons selected.</li>';
+  const sorted = [...selected.entries()]
+    .map(([id, count])=>({ ribbon: ribbons.find((r)=>r.id===id), count }))
+    .filter((entry)=>entry.ribbon)
+    .sort((a,b)=>a.ribbon.precedence-b.ribbon.precedence || a.ribbon.name.localeCompare(b.ribbon.name));
+
+  const expanded = sorted.flatMap(({ ribbon, count }) => Array.from({ length: count }, ()=>ribbon));
+  const rows = [];
+  for(let i=0;i<expanded.length;i+=width) rows.push(expanded.slice(i,i+width));
+
+  el('rackPreview').innerHTML = rows.map((row)=>`<div class="rack-row">${row.map((r)=>`<img class="ribbon-tile" title="${r.name}" src="${r.image}" alt="${r.name}"/>`).join('')}</div>`).join('') || '<div>No ribbons selected.</div>';
+
+  el('selectedRibbons').innerHTML = sorted
+    .map(({ ribbon, count })=>`<li>${ribbon.name} × ${count}</li>`)
+    .join('') || '<li>No ribbons selected.</li>';
 }
 
 init();
