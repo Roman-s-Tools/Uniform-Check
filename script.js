@@ -111,10 +111,15 @@ function renderCatalog(){
 
 function getDeviceCounts(totalAwards){
   const additionalAwards = Math.max(0, totalAwards - 1);
-  return {
-    silver: Math.floor(additionalAwards / 5),
-    bronze: additionalAwards % 5
-  };
+  const silver = Math.floor(additionalAwards / 5);
+  const bronze = additionalAwards % 5;
+
+  const devices = [
+    ...Array.from({ length: silver }, ()=> 'silver'),
+    ...Array.from({ length: bronze }, ()=> 'bronze')
+  ];
+
+  return devices.slice(0, 4);
 }
 
 function renderRack(){
@@ -128,11 +133,11 @@ function renderRack(){
   for(let i=0;i<sorted.length;i+=width) rows.push(sorted.slice(i,i+width));
 
   el('rackPreview').innerHTML = rows.map((row)=>`<div class="rack-row">${row.map(({ ribbon, count })=>{
-    const devices = getDeviceCounts(count);
-    const bronzeDevices = Array.from({ length: devices.bronze }, ()=>'<img class="device-icon" src="ribbons/devices/bronzetriangle.png" alt="Bronze triangle device"/>').join('');
-    const silverDevices = Array.from({ length: devices.silver }, ()=>'<img class="device-icon" src="ribbons/devices/silvertriangle.png" alt="Silver triangle device"/>').join('');
+    const devices = getDeviceCounts(count)
+      .map((deviceType)=>`<img class="device-icon" src="ribbons/devices/${deviceType}triangle.png" alt="${deviceType === 'silver' ? 'Silver' : 'Bronze'} triangle device"/>`)
+      .join('');
 
-    return `<div class="ribbon-stack" title="${ribbon.name} (x${count})"><img class="ribbon-tile" src="${ribbon.image}" alt="${ribbon.name}"/><div class="device-row">${silverDevices}${bronzeDevices}</div></div>`;
+    return `<div class="ribbon-stack" title="${ribbon.name} (x${count})"><img class="ribbon-tile" src="${ribbon.image}" alt="${ribbon.name}"/><div class="device-overlay">${devices}</div></div>`;
   }).join('')}</div>`).join('') || '<div>No ribbons selected.</div>';
 
   el('selectedRibbons').innerHTML = sorted
