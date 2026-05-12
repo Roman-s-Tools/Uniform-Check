@@ -9,10 +9,10 @@ h1{margin:0;font-size:1.2rem}.subtitle{margin:.3rem 0 0;color:#475569;font-size:
 input,select{width:100%;border:1px solid var(--line);padding:.45rem;border-radius:4px}
 .ribbon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-height:76vh;overflow:auto;padding-right:4px}
 .ribbon-item{border:1px solid var(--line);border-radius:4px;padding:6px;background:#fff;display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center}
-.ribbon-swatch{height:24px;border:1px solid #6b7280;border-radius:2px}
+.ribbon-swatch{height:24px;width:100%;object-fit:cover;border:1px solid #6b7280;border-radius:2px;background:#fff}
 .ribbon-name{font-size:.85rem;font-weight:600}.ribbon-meta{font-size:.75rem;color:#4b5563}
 .control-row{display:flex;gap:8px;max-width:140px}
 .rack{background:#fff;border:1px dashed #9fb0c2;border-radius:4px;padding:10px;min-height:150px;display:grid;gap:6px}
-.rack-row{display:flex;gap:6px}.ribbon-tile{width:92px;height:28px;border:1px solid #445264;border-radius:2px}
+.rack-row{display:flex;gap:6px}.ribbon-tile{width:92px;height:28px;object-fit:cover;border:1px solid #445264;border-radius:2px;background:#fff}
 .selected-list{margin:8px 0 0;padding-left:18px;font-size:.88rem;display:grid;gap:4px}
 @media (max-width: 900px){.rack-layout{grid-template-columns:1fr}}
