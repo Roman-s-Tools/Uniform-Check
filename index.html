@@ -3,103 +3,47 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Uniform Check | CAP Ribbon + Uniform Builder</title>
+    <title>Uniform Check | CAP Rack Builder</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="topbar">
       <div>
-        <h1>CAP Ribbon + Uniform Builder</h1>
-        <p class="subtitle">Unofficial helper for cadets, seniors, and inspectors.</p>
+        <h1>CAP Ribbon Checker</h1>
+        <p class="subtitle">Styled like McChord's rack checker, tailored to this app.</p>
       </div>
-      <span class="route-pill">/tools/cap-ribbon-builder</span>
+      <div class="member-toggle" role="tablist" aria-label="Member type">
+        <button id="adultToggle" class="toggle active" type="button">Adult Members</button>
+        <button id="cadetToggle" class="toggle" type="button">Cadets</button>
+      </div>
     </header>
 
-    <main class="layout" id="RibbonBuilderPage">
-      <section class="card" aria-labelledby="profile-heading">
-        <h2 id="profile-heading">SavedProfilePanel</h2>
-        <div class="grid two">
-          <label>Name <input id="profileName" placeholder="e.g., C/Amn Jane Doe" /></label>
-          <label>Grade <input id="profileGrade" placeholder="e.g., C/SSgt" /></label>
-          <label>Unit <input id="profileUnit" placeholder="e.g., TX-123" /></label>
-          <label>Preferred Uniform
-            <select id="profileUniformType"></select>
-          </label>
+    <main class="rack-layout">
+      <section class="panel controls">
+        <div class="panel-head">
+          <h2>Ribbon Catalog</h2>
+          <input id="searchInput" placeholder="Search ribbons..." />
         </div>
-        <div class="btn-row">
-          <button id="loadProfileBtn" class="secondary">Load Profile</button>
-          <button id="saveProfileBtn">Save Profile</button>
-          <span id="profileStatus" class="muted"></span>
-        </div>
+        <div id="ribbonResults" class="ribbon-grid"></div>
       </section>
 
-      <section class="card" id="RibbonSearch">
-        <h2>RibbonSearch + RibbonSelector</h2>
-        <label class="search-wrap">
-          <input id="searchInput" placeholder="Search ribbons/awards…" />
-        </label>
-        <div id="ribbonResults" class="ribbon-list"></div>
-      </section>
-
-      <section class="card" id="SelectedRibbonList">
-        <h2>SelectedRibbonList</h2>
-        <div class="grid three">
-          <label>Rack width
+      <section class="panel preview">
+        <h2>Rack Preview</h2>
+        <div class="control-row">
+          <label>Rows
             <select id="rackWidth">
-              <option value="1">1-wide</option>
-              <option value="2">2-wide</option>
-              <option value="3" selected>3-wide</option>
-              <option value="4">4-wide</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
             </select>
-          </label>
-          <label>Source profile
-            <select id="sourcePreset">
-              <option value="cadet">Cadet baseline</option>
-              <option value="senior">Senior baseline</option>
-            </select>
-          </label>
-          <label>Uniform type
-            <select id="uniformType"></select>
           </label>
         </div>
+        <div id="rackPreview" class="rack"></div>
+        <h3>Selected Awards</h3>
         <ul id="selectedRibbons" class="selected-list"></ul>
       </section>
-
-      <section class="card" id="RibbonRackPreview">
-        <h2>RibbonRackPreview</h2>
-        <div id="rackPreview" class="rack"></div>
-      </section>
-
-      <section class="card" id="UniformPreview">
-        <h2>UniformPreview + UniformTypeSelector</h2>
-        <div class="uniform-canvas">
-          <div class="uniform torso">
-            <div class="nameplate">NAMEPLATE</div>
-            <div class="rack-anchor">
-              <div id="rackClone"></div>
-            </div>
-            <div class="measure">Ribbons centered and resting on, but not over, left breast pocket.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card" id="ValidationWarnings">
-        <h2>ValidationWarnings</h2>
-        <ul id="warnings" class="warnings"></ul>
-      </section>
     </main>
-
-    <div class="action-bar">
-      <button id="previewBtn" class="secondary">Preview</button>
-      <button id="saveBtn">Save</button>
-      <button id="exportPngBtn">Export PNG</button>
-      <button id="exportPdfBtn" class="secondary">Export PDF</button>
-      <button id="shareBtn" class="secondary">Share Link</button>
-    </div>
-
-    <footer>
-      This unofficial tool is provided for convenience. Always verify final uniform wear and ribbon precedence with the current CAPR 39-1 and applicable Civil Air Patrol publications.
-    </footer>
 
     <script src="script.js"></script>
   </body>
