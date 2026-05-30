@@ -11,8 +11,17 @@ input,select{width:100%;border:1px solid var(--line);padding:.45rem;border-radiu
 .ribbon-item{border:1px solid var(--line);border-radius:4px;padding:6px;background:#fff;display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center}
 .ribbon-swatch{height:24px;width:100%;object-fit:cover;border:1px solid #6b7280;border-radius:2px;background:#fff}
 .ribbon-name{font-size:.85rem;font-weight:600}.ribbon-meta{font-size:.75rem;color:#4b5563}
-.control-row{display:flex;gap:8px;max-width:140px}
+.control-row{display:flex;gap:8px;align-items:flex-end}
+.control-row label{flex:0 0 140px}
+.generate-btn{width:auto;cursor:pointer;background:var(--accent);color:#fff;border:1px solid var(--accent);padding:.45rem .9rem;border-radius:4px;font-weight:600}
+.generate-btn:hover{background:#0b3a61}
 .rack{background:#fff;border:1px dashed #9fb0c2;border-radius:4px;padding:10px;min-height:150px;display:grid;gap:6px}
-.rack-row{display:flex;gap:6px;align-items:flex-start}.ribbon-stack{position:relative;display:inline-block;min-width:92px}.ribbon-tile{width:92px;height:28px;object-fit:cover;border:1px solid #445264;border-radius:2px;background:#fff}.device-overlay{position:absolute;inset:0;display:flex;gap:2px;align-items:center;justify-content:center;pointer-events:none}.device-icon{width:10px;height:10px;object-fit:contain}
+.rack-row{display:flex;gap:6px;align-items:flex-start;justify-content:center}.ribbon-stack{position:relative;display:inline-block;min-width:92px}.ribbon-tile{width:92px;height:28px;object-fit:cover;border:1px solid #445264;border-radius:2px;background:#fff}.device-overlay{position:absolute;inset:0;display:flex;gap:2px;align-items:center;justify-content:center;pointer-events:none}
+.device-icon{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid #cd7f32;filter:drop-shadow(0 0 1px rgba(0,0,0,.6))}.device-icon.silver{border-bottom-color:#c0c0c0}
 .selected-list{margin:8px 0 0;padding-left:18px;font-size:.88rem;display:grid;gap:4px}
+.hint{font-weight:400;font-size:.75rem;color:#64748b}
+.text-row{display:flex;gap:8px;align-items:flex-start}
+.rack-text{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;resize:vertical}
+.copy-btn{width:auto;cursor:pointer;background:#fff;border:1px solid #6b7f95;padding:.45rem .7rem;border-radius:4px}
+.copy-btn:hover{background:#eef3f9}
 @media (max-width: 900px){.rack-layout{grid-template-columns:1fr}}
