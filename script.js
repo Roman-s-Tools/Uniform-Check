@@ -72,6 +72,8 @@ const el = (id) => document.getElementById(id);
 function init(){
   el('searchInput').addEventListener('input', renderCatalog);
   el('rackWidth').addEventListener('change', renderRack);
+  el('generateBtn').addEventListener('click', renderRack);
+  el('copyBtn').addEventListener('click', copyRackText);
   renderCatalog();
   renderRack();
 }
@@ -106,11 +108,13 @@ function renderCatalog(){
       } else {
         selected.set(input.dataset.id, parsed);
       }
-      renderRack();
     });
   });
 }
 
+// Additional awards of the same ribbon are denoted by devices: one bronze
+// device per additional award, with a silver device replacing every five
+// bronze (CAPR 39-1). Highest-value devices are listed first.
 function getDeviceCounts(totalAwards){
   const additionalAwards = Math.max(0, totalAwards - 1);
   const silver = Math.floor(additionalAwards / 5);
@@ -124,27 +128,67 @@ function getDeviceCounts(totalAwards){
   return devices.slice(0, 4);
 }
 
-function renderRack(){
-  const width = Number(el('rackWidth').value || 3);
-  const sorted = [...selected.entries()]
+// Get the selected ribbons in order of precedence (highest precedence first).
+function getSortedSelection(){
+  return [...selected.entries()]
     .map(([id, count])=>({ ribbon: ribbons.find((r)=>r.id===id), count }))
     .filter((entry)=>entry.ribbon)
     .sort((a,b)=>a.ribbon.precedence-b.ribbon.precedence || a.ribbon.name.localeCompare(b.ribbon.name));
+}
 
-  const rows = [];
-  for(let i=0;i<sorted.length;i+=width) rows.push(sorted.slice(i,i+width));
+// Arrange ribbons into rows like a worn rack: highest precedence on top, full
+// rows on the bottom, and any short row centered at the top.
+function buildRows(sorted, width){
+  const total = sorted.length;
+  if (!total) return [];
+  const topCount = total % width || width;
+  const rows = [sorted.slice(0, topCount)];
+  for(let i=topCount;i<total;i+=width) rows.push(sorted.slice(i, i+width));
+  return rows;
+}
+
+function renderRack(){
+  const width = Number(el('rackWidth').value || 3);
+  const sorted = getSortedSelection();
+  const rows = buildRows(sorted, width);
 
   el('rackPreview').innerHTML = rows.map((row)=>`<div class="rack-row">${row.map(({ ribbon, count })=>{
     const devices = getDeviceCounts(count)
-      .map((deviceType)=>`<img class="device-icon" src="ribbons/devices/${deviceType}triangle.png" alt="${deviceType === 'silver' ? 'Silver' : 'Bronze'} triangle device"/>`)
+      .map((deviceType)=>`<span class="device-icon ${deviceType}" title="${deviceType === 'silver' ? 'Silver' : 'Bronze'} device"></span>`)
       .join('');
 
     return `<div class="ribbon-stack" title="${ribbon.name} (x${count})"><img class="ribbon-tile" src="${ribbon.image}" alt="${ribbon.name}"/><div class="device-overlay">${devices}</div></div>`;
   }).join('')}</div>`).join('') || '<div>No ribbons selected.</div>';
 
   el('selectedRibbons').innerHTML = sorted
-    .map(({ ribbon, count })=>`<li>${ribbon.name} × ${count}</li>`)
+    .map(({ ribbon, count })=>`<li>${ribbon.name}${count > 1 ? ` × ${count}` : ''}</li>`)
     .join('') || '<li>No ribbons selected.</li>';
+
+  el('rackText').value = sorted
+    .map(({ ribbon, count })=>count > 1 ? `${ribbon.name} (x${count})` : ribbon.name)
+    .join('\n');
+}
+
+function copyRackText(){
+  const text = el('rackText').value;
+  if (!text) return;
+  const done = ()=>{
+    const btn = el('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(()=>{ btn.textContent = original; }, 1500);
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(()=>{
+      el('rackText').select();
+      document.execCommand('copy');
+      done();
+    });
+  } else {
+    el('rackText').select();
+    document.execCommand('copy');
+    done();
+  }
 }
 
 init();

@@ -26,7 +26,7 @@
       <section class="panel preview">
         <h2>Rack Preview</h2>
         <div class="control-row">
-          <label>Rows
+          <label>Ribbons per row
             <select id="rackWidth">
               <option value="1">1</option>
               <option value="2">2</option>
@@ -34,10 +34,16 @@
               <option value="4">4</option>
             </select>
           </label>
+          <button id="generateBtn" type="button" class="generate-btn">Generate Graphic</button>
         </div>
         <div id="rackPreview" class="rack"></div>
         <h3>Selected Awards</h3>
         <ul id="selectedRibbons" class="selected-list"></ul>
+        <h3>Rack Text <span class="hint">(paste into UltraThin Rack Builder)</span></h3>
+        <div class="text-row">
+          <textarea id="rackText" class="rack-text" readonly rows="6" placeholder="Press Generate Graphic to build your rack text."></textarea>
+          <button id="copyBtn" type="button" class="copy-btn">Copy</button>
+        </div>
       </section>
     </main>
 
